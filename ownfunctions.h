@@ -12,6 +12,22 @@
  * Marc Töpker
  *
  *****************************************************************************/
+#ifndef OWNFUNCTIONS_H
+#define OWNFUNCTIONS_H
+
+#include <RP6RobotBaseLib.h>
+
+#define HALBER_ACHSABSTAND  51.5
+#define PI                  3.142
+
+ int iRadius     = 0; // Radius
+ int iLeftSpeed  = 0;
+ int iRightSpeed = 0;
+
+ void calculateSpeed(int, int, char);
+
+ uint16_t calculateDistanceForLeftTrack(int, char);
 
 
+#endif // OWNFUNCTIONS_H
 /***************** End of file <ownfunctions.h> *****************************/
