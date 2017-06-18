@@ -1,0 +1,46 @@
+# depslib dependency file v1.0
+1497620583 source:c:\users\jens reimer\documents\github\roboterrp6_kreise\main.c
+	<RP6RobotBaseLib.h>
+
+1497427490 c:\users\jens reimer\documents\github\roboterrp6_kreise\rp6lib\rp6base\rp6robotbaselib.h
+	"RP6RobotBase.h"
+	"RP6Config.h"
+	"RP6uart.h"
+	<avr/sleep.h>
+	<stdlib.h>
+
+1497427490 c:\users\jens reimer\documents\github\roboterrp6_kreise\rp6lib\rp6base\rp6robotbase.h
+	<avr/io.h>
+	<avr/interrupt.h>
+
+1497427490 c:\users\jens reimer\documents\github\roboterrp6_kreise\rp6lib\rp6common\rp6config.h
+
+1497427490 c:\users\jens reimer\documents\github\roboterrp6_kreise\rp6lib\rp6common\rp6uart.h
+	<avr/pgmspace.h>
+	<stdlib.h>
+	<string.h>
+	<avr/io.h>
+	<avr/interrupt.h>
+
+1497619592 source:c:\users\jens reimer\documents\github\roboterrp6_kreise\ownfunctions.c
+	"ownfunctions.h"
+
+1497468975 c:\users\jens reimer\documents\github\roboterrp6_kreise\ownfunctions.h
+	<RP6RobotBaseLib.h>
+
+1497427490 source:c:\users\jens reimer\documents\github\roboterrp6_kreise\rp6lib\rp6base\rp6robotbaselib.c
+	"RP6RobotBaseLib.h"
+
+1497427490 source:c:\users\jens reimer\documents\github\roboterrp6_kreise\rp6lib\rp6common\rp6i2cslavetwi.c
+	"RP6I2CslaveTWI.h"
+
+1497427490 c:\users\jens reimer\documents\github\roboterrp6_kreise\rp6lib\rp6common\rp6i2cslavetwi.h
+	<stdint.h>
+	<avr/interrupt.h>
+
+1497427490 source:c:\users\jens reimer\documents\github\roboterrp6_kreise\rp6lib\rp6common\rp6uart.c
+	"RP6uart.h"
+
+1497619592 c:\users\jens reimer\documents\github\roboterrp6_kreise\ownfunctions.c
+	"ownfunctions.h"
+

@@ -20,13 +20,14 @@
 #define HALBER_ACHSABSTAND  51.5
 #define PI                  3.142
 
- int iRadius     = 0; // Radius
- int iLeftSpeed  = 0;
- int iRightSpeed = 0;
+    int iRadius     = 0; // Radius
+    int iLeftSpeed;
+    int iRightSpeed;
+    int iSpeed = 60;
+    void calculateSpeed(int , int , char );
+    void driveRad (int,char);
 
- void calculateSpeed(int, int, char);
-
- uint16_t calculateDistanceForLeftTrack(int, char);
+    uint16_t calculateDistanceForLeftTrack_Arc(int, char);
 
 
 #endif // OWNFUNCTIONS_H

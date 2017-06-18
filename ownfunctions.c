@@ -15,6 +15,24 @@
 
 #include "ownfunctions.h"
 
+void driveRad (int Radius, char direction)
+{
+        if (getLeftDistance()== Radius)
+        {
+            calculateSpeed(Radius, 60, direction);
+        }
+
+        if (getLeftDistance()== (Radius+calculateDistanceForLeftTrack_Arc(Radius  , direction)))
+        {
+            calculateSpeed(Radius, 60, 'G');
+        }
+        if (getLeftDistance()> (2*Radius+calculateDistanceForLeftTrack_Arc(Radius, direction)))
+        {
+            stop();
+            iLeftSpeed=0;
+            iRightSpeed=0;
+        }
+}
 
 void calculateSpeed(int iRadius, int iSpeed, char direction)
 {
@@ -37,7 +55,7 @@ void calculateSpeed(int iRadius, int iSpeed, char direction)
     }
 }
 
-uint16_t calculateDistanceForLeftTrack(int iRadius, char direction)
+uint16_t calculateDistanceForLeftTrack_Arc(int iRadius, char direction)
 {
     uint16_t distance = 0;
 
