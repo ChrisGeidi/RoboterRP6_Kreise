@@ -13,10 +13,22 @@
  *
  *****************************************************************************/
 
-//#include <avr/io.h>
 #include <RP6RobotBaseLib.h>
 #define HALBER_ACHSABSTAND  51.5
 #define PI                  3.142
+
+	unsigned int radius_eins;
+    unsigned int radius_zwei;
+    unsigned int radius_drei;
+    unsigned int radius_vier;
+    int iLeftSpeed;
+    int iRightSpeed;
+    int iSpeed = 60;
+    void calculateSpeed(unsigned int, int, int);
+    void driveRadius (unsigned int,int,int direction);
+    void checkState();
+
+    uint16_t calculateDistanceForLeftTrack_Arc(unsigned int, int direction);
 
     enum direction
     {
@@ -25,65 +37,53 @@
         straight
     };
 
-    int iRadius     = 0; // Radius
-    int iLeftSpeed;
-    int iRightSpeed;
-    int iSpeed = 60;
-    void calculateSpeed(int, int, int);
-    void driveRadius (int,int,int direction);
+    enum Zustand
+    {
+		IDLE,
+        r1, //Radius1
+        r2, //Radius2
+        r3, //Radius3
+        r4  //Radius4
+    } state;
 
-    uint16_t calculateDistanceForLeftTrack_Arc(int, int direction);
-
-
-int main(void)
+void Zustand (void)
 {
-    initRobotBase();
-    int r = 200;
-    mleft_dist = 0;
-    mright_dist = 0;
-    iLeftSpeed = 80;
-    iRightSpeed = 80;
-    int speed = 80;
-    mSleep(1500);
+	switch (state)
+	{
+		case IDLE:
+			stop();
+		break;
 
-    powerON(); // Encoder und Motorstromsensoren anschalten!
+		case r1:
+		void driveRadius(radius_eins,iSpeed, left);
+		setLEDs(0b000001); // Und dieser schaltet StatusLED1 an und alle anderen aus.
+		state = r2;
+		break;
 
-    moveAtSpeed(iLeftSpeed,iRightSpeed); // Geschwindigkeit einstellen#
-    void driveRadius(r, speed, left);
+		case r2:
+		void driveRadius(radius_zwei,iSpeed, right);
+		setLEDs(0b000010); // StatusLED2
+		state = r3;
+		break;
 
-    while(true)
-    {
+		case r3:
+		void driveRadius(radius_drei,iSpeed, left);
+		setLEDs(0b000100); // StatusLED3
+		state = r4;
+		break;
 
-
-
-        moveAtSpeed(iLeftSpeed,iRightSpeed);
-
-
-        // Aus der Hauptschleife ständig die motionControl Funktion
-        // aufrufen – sie regelt die Motorgeschwindigkeiten:
-        task_motionControl();
-        task_ADC(); // Wird wegen den Motorstromsensoren aufgerufen!
-    }
-    return 0;
-    while(1)
-    {
-        //
-    }
-
-    return 0;
+		case r4:
+		void driveRadius(radius_vier,iSpeed, right);
+		setLEDs(0b001010);		// StatusLED4 und StatusLED2
+		state =IDLE;
+		break;
+	}
 }
 
-void driveRadius (int Radius, int speed, int direction)
+void driveRadius (unsigned int Radius, int speed, int direction)
 {
-        if (getLeftDistance()== Radius)
-        {
-            calculateSpeed(Radius, speed, direction);
-        }
-
-        if (getLeftDistance()== (Radius+calculateDistanceForLeftTrack_Arc(Radius  , direction)))
-        {
-            calculateSpeed(Radius, speed, straight);
-        }
+        if (getLeftDistance()== Radius) calculateSpeed(Radius, speed, direction);
+        if (getLeftDistance()== (Radius+calculateDistanceForLeftTrack_Arc(Radius  , direction))) calculateSpeed(Radius, speed, straight);
         if (getLeftDistance()> (2*Radius+calculateDistanceForLeftTrack_Arc(Radius, direction)))
         {
             stop();
@@ -92,7 +92,7 @@ void driveRadius (int Radius, int speed, int direction)
         }
 };
 
-void calculateSpeed(int iRadius, int iSpeed, int direction)
+void calculateSpeed(unsigned int iRadius, int iSpeed, int direction)
 {
     switch(direction)
     {
@@ -113,7 +113,7 @@ void calculateSpeed(int iRadius, int iSpeed, int direction)
     }
 }
 
-uint16_t calculateDistanceForLeftTrack_Arc(int iRadius, int direction)
+uint16_t calculateDistanceForLeftTrack_Arc(unsigned int iRadius, int direction)
 {
     uint16_t distance = 0;
 
@@ -130,5 +130,48 @@ uint16_t calculateDistanceForLeftTrack_Arc(int iRadius, int direction)
 
     return distance;
 }
+
+void moveCircle(uint8_t iLeftSpeed, uint8_t iRightSpeed)
+{
+	if(iLeftSpeed > 200) iLeftSpeed = 200;
+	if(iRightSpeed > 200) iRightSpeed = 200;
+	mleft_des_speed = iLeftSpeed;
+	mright_des_speed = iRightSpeed;
+}
+
+int main(void)
+{
+
+
+    iSpeed = 80;
+    radius_eins = 400;
+    radius_zwei = 500;
+    radius_drei = 600;
+    radius_vier = 700;
+    mleft_dist = 0;
+    mright_dist = 0;
+    iLeftSpeed = 80;
+    iRightSpeed = 80;
+    initRP6Control();
+    initRobotBase();
+    mSleep(1500);
+
+    powerON(); // Encoder und Motorstromsensoren anschalten!
+
+	//inital value
+	state = r1;
+
+
+    while(true)
+    {
+        Zustand();
+        task_motionControl();
+		task_RP6System();
+    }
+    return 0;
+
+}
+
+
 
 /******************** End of file <main.c> ***********************************/
