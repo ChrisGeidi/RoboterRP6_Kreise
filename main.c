@@ -30,14 +30,14 @@
 
     uint16_t calculateDistanceForLeftTrack_Arc(unsigned int, int direction);
 
-    enum direction
+    enum direction                              // stellt die Fahrtrichtungen dar
     {
         left,
         right,
         straight
     };
 
-    enum Zustand
+    enum Zustand                                // stellt die Zustände der vier Kreisfahrten dar
     {
 		IDLE,
         r1, //Radius1
@@ -48,7 +48,7 @@
 
 void Zustand (void)
 {
-	switch (state)
+	switch (state)                                  // Hier wird die Entscheidung getroffen welcher Kreis gefahren werden soll
 	{
 		case IDLE:
 			stop();
@@ -56,25 +56,25 @@ void Zustand (void)
 
 		case r1:
 		driveRadius(radius_eins,iSpeed, left);
-		setLEDs(0b000001); // Und dieser schaltet StatusLED1 an und alle anderen aus.
+		setLEDs(0b000001);                          // LED dient der Statusanzeige zur visuellen Überwachung in welchem Zustand sich das Programm befindet.
 		state = r2;
 		break;
 
 		case r2:
 		driveRadius(radius_zwei,iSpeed, right);
-		setLEDs(0b000010); // StatusLED2
+		setLEDs(0b000010);                          // LED dient der Statusanzeige zur visuellen Überwachung in welchem Zustand sich das Programm befindet.
 		state = r3;
 		break;
 
 		case r3:
 		driveRadius(radius_drei,iSpeed, left);
-		setLEDs(0b000100); // StatusLED3
+		setLEDs(0b000100);                          // LED dient der Statusanzeige zur visuellen Überwachung in welchem Zustand sich das Programm befindet.
 		state = r4;
 		break;
 
 		case r4:
 		driveRadius(radius_vier,iSpeed, right);
-		setLEDs(0b001010);		// StatusLED4 und StatusLED2
+		setLEDs(0b001010);                          // LED dient der Statusanzeige zur visuellen Überwachung in welchem Zustand sich das Programm befindet.
 		state =IDLE;
 		break;
 	}
@@ -92,46 +92,46 @@ void driveRadius (unsigned int Radius, int speed, int direction)
         }
 };
 
-void calculateSpeed(unsigned int iRadius, int iSpeed, int direction)
+void calculateSpeed(unsigned int iRadius, int iSpeed, int direction) // Die Radiusfahrt wird über die Differenz der Kettengeschwindigkeiten erzielt
 {
-    switch(direction)
+    switch(direction)       //je nach Fahrtrichtung für den Radius wird entschieden welche Kette wie schnell angetrieben werden muss
     {
-    case 1:
-        iLeftSpeed  = iSpeed;
-        iRightSpeed = iLeftSpeed / (iRadius + HALBER_ACHSABSTAND) * (iRadius - HALBER_ACHSABSTAND);
-        break;
-
-    case 0:
+    case left:
         iRightSpeed = iSpeed;
         iLeftSpeed  = iRightSpeed / (iRadius + HALBER_ACHSABSTAND) * (iRadius - HALBER_ACHSABSTAND);
         break;
 
-    case 2:
+    case right:
+        iLeftSpeed  = iSpeed;
+        iRightSpeed = iLeftSpeed / (iRadius + HALBER_ACHSABSTAND) * (iRadius - HALBER_ACHSABSTAND);
+        break;
+
+    case straight:
         iLeftSpeed  = iSpeed;
         iRightSpeed = iSpeed;
         break;
     }
 }
 
-uint16_t calculateDistanceForLeftTrack_Arc(unsigned int iRadius, int direction)
+uint16_t calculateDistanceForLeftTrack_Arc(unsigned int iRadius, int direction) //Als Referenzwert für die gefahrene Distanz wird die Distanz der linken Kette ermittelt
 {
     uint16_t distance = 0;
 
-    switch(direction)
+    switch(direction)               //Hier wird ebenfalls unterschieden ob es sich um eine linke oder rechte Kreisfahrt handelt
     {
-    case 1:
-        distance = 2 * PI * (iRadius + HALBER_ACHSABSTAND)*3/4;
+    case left:
+        distance = 2 * PI * (iRadius - HALBER_ACHSABSTAND)*3/4;
         break;
 
-    case 0:
-        distance = 2 * PI * (iRadius - HALBER_ACHSABSTAND)*3/4;
+    case right:
+        distance = 2 * PI * (iRadius + HALBER_ACHSABSTAND)*3/4;
         break;
     }
 
     return distance;
 }
 
-void moveCircle(uint8_t iLeftSpeed, uint8_t iRightSpeed)
+void moveCircle(uint8_t iLeftSpeed, uint8_t iRightSpeed) //Übergabe der Geschwindigkeiten der Ketten an die Motorsteuerung
 {
 	if(iLeftSpeed > 200) iLeftSpeed = 200;
 	if(iRightSpeed > 200) iRightSpeed = 200;
