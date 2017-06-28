@@ -55,25 +55,25 @@ void Zustand (void)
 		break;
 
 		case r1:
-		void driveRadius(radius_eins,iSpeed, left);
+		driveRadius(radius_eins,iSpeed, left);
 		setLEDs(0b000001); // Und dieser schaltet StatusLED1 an und alle anderen aus.
 		state = r2;
 		break;
 
 		case r2:
-		void driveRadius(radius_zwei,iSpeed, right);
+		driveRadius(radius_zwei,iSpeed, right);
 		setLEDs(0b000010); // StatusLED2
 		state = r3;
 		break;
 
 		case r3:
-		void driveRadius(radius_drei,iSpeed, left);
+		driveRadius(radius_drei,iSpeed, left);
 		setLEDs(0b000100); // StatusLED3
 		state = r4;
 		break;
 
 		case r4:
-		void driveRadius(radius_vier,iSpeed, right);
+		driveRadius(radius_vier,iSpeed, right);
 		setLEDs(0b001010);		// StatusLED4 und StatusLED2
 		state =IDLE;
 		break;
@@ -152,7 +152,6 @@ int main(void)
     mright_dist = 0;
     iLeftSpeed = 80;
     iRightSpeed = 80;
-    initRP6Control();
     initRobotBase();
     mSleep(1500);
 
